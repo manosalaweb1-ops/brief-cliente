@@ -666,7 +666,8 @@
   </style>
 
   <!-- Google Fonts para previews de tipografías -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400&family=Cormorant+Garamond:wght@300;400&family=Plus+Jakarta+Sans:wght@300;400;500&family=Albert+Sans:wght@300;400;700&family=Outfit:wght@300;400;500&family=Sora:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=Plus+Jakarta+Sans:wght@300;400;500&family=Inter:wght@300;400;700&family=Urbanist:wght@300;400;500&family=Albert+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -925,6 +926,23 @@
         </div>
 
       </div>
+
+      <div id="ref-web-section" style="margin-top:16px;">
+        <div style="height:0.5px; background:var(--border); margin:20px 0;"></div>
+        <div class="field-group full">
+          <div class="field">
+            <label for="ref-web">¿Tenés una web de referencia que te guste? (opcional)</label>
+            <input type="url" id="ref-web" placeholder="https://ejemplodeweb.com">
+            <span class="field-hint">Podés pegar el link de cualquier web cuyo estilo, diseño o estructura te inspire. No tiene que ser del mismo rubro.</span>
+          </div>
+        </div>
+        <div class="field-group full" style="margin-top:12px;">
+          <div class="field">
+            <label for="ref-web-desc">¿Qué te gusta de esa web?</label>
+            <textarea id="ref-web-desc" style="min-height:70px;" placeholder="Ej: Me gusta cómo organiza los servicios, los colores que usa, la tipografía, el estilo general..."></textarea>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -1062,44 +1080,37 @@
 
         <div class="font-card" onclick="selectFont(this, 'dm-sans')">
           <div class="font-check">✓</div>
-          <div class="font-sample" style="font-family:'DM Sans',sans-serif;">Aa Bb</div>
+          <div class="font-sample" style="font-family:'DM Sans',sans-serif; font-weight:300;">Aa Bb</div>
           <div class="font-name">DM Sans</div>
-          <div class="font-style">Moderno · Geométrico · Limpio</div>
+          <div class="font-style">Forma Studio · Elegante · Geométrico</div>
+        </div>
+
+        <div class="font-card" onclick="selectFont(this, 'helvetica')">
+          <div class="font-check">✓</div>
+          <div class="font-sample" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:300; letter-spacing:-0.03em;">Aa Bb</div>
+          <div class="font-name">Helvetica Neue</div>
+          <div class="font-style">Ivory Clinic · Peso como emoción · Premium</div>
         </div>
 
         <div class="font-card" onclick="selectFont(this, 'plus-jakarta')">
           <div class="font-check">✓</div>
-          <div class="font-sample" style="font-family:'Plus Jakarta Sans',sans-serif;">Aa Bb</div>
+          <div class="font-sample" style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:300;">Aa Bb</div>
           <div class="font-name">Plus Jakarta Sans</div>
-          <div class="font-style">Amigable · Contemporáneo</div>
+          <div class="font-style">DentAll · Orgánica · Moderna</div>
         </div>
 
-        <div class="font-card" onclick="selectFont(this, 'playfair')">
+        <div class="font-card" onclick="selectFont(this, 'inter')">
           <div class="font-check">✓</div>
-          <div class="font-sample" style="font-family:'Playfair Display',serif; font-style:italic;">Aa Bb</div>
-          <div class="font-name">Playfair Display</div>
-          <div class="font-style">Clásico · Elegante · Editorial</div>
+          <div class="font-sample" style="font-family:'Inter',sans-serif; font-weight:700; letter-spacing:-0.02em;">Aa Bb</div>
+          <div class="font-name">Inter</div>
+          <div class="font-style">White Smile · Bold · Directo</div>
         </div>
 
-        <div class="font-card" onclick="selectFont(this, 'cormorant')">
+        <div class="font-card" onclick="selectFont(this, 'urbanist-albert')">
           <div class="font-check">✓</div>
-          <div class="font-sample" style="font-family:'Cormorant Garamond',serif; font-weight:300;">Aa Bb</div>
-          <div class="font-name">Cormorant Garamond</div>
-          <div class="font-style">Refinado · Luxury · Atemporal</div>
-        </div>
-
-        <div class="font-card" onclick="selectFont(this, 'albert')">
-          <div class="font-check">✓</div>
-          <div class="font-sample" style="font-family:'Albert Sans',sans-serif; font-weight:700;">Aa Bb</div>
-          <div class="font-name">Albert Sans</div>
-          <div class="font-style">Bold · Tecnológico · Directo</div>
-        </div>
-
-        <div class="font-card" onclick="selectFont(this, 'outfit')">
-          <div class="font-check">✓</div>
-          <div class="font-sample" style="font-family:'Outfit',sans-serif;">Aa Bb</div>
-          <div class="font-name">Outfit</div>
-          <div class="font-style">Fresco · Juvenil · Versátil</div>
+          <div class="font-sample" style="font-family:'Urbanist','Albert Sans',sans-serif; font-weight:700; letter-spacing:-0.04em;">Aa Bb</div>
+          <div class="font-name">Urbanist + Albert Sans</div>
+          <div class="font-style">Oris Clinic · Tecnológico · Impacto</div>
         </div>
 
       </div>
@@ -1119,44 +1130,7 @@
       <p class="step-desc">Configuramos el asistente que va a atender a tus clientes por WhatsApp.</p>
     </div>
 
-    <div class="card">
-      <div class="card-title"><div class="card-title-icon">🤖</div> Personalidad del asistente</div>
-      <div class="field-group" style="margin-bottom:14px;">
-        <div class="field">
-          <label for="agent-name">Nombre del asistente *</label>
-          <input type="text" id="agent-name" placeholder="Ej: Valentina, Lucía, Max...">
-          <span class="field-hint">El nombre con el que se presenta a los clientes.</span>
-        </div>
-        <div class="field">
-          <label for="agent-gender">Género</label>
-          <select id="agent-gender">
-            <option value="">Elegí una opción</option>
-            <option>Femenino</option>
-            <option>Masculino</option>
-            <option>Neutro</option>
-          </select>
-        </div>
-      </div>
-      <div class="field-group full" style="margin-bottom:14px;">
-        <div class="field">
-          <label for="agent-tone">Tono y estilo de comunicación</label>
-          <select id="agent-tone">
-            <option value="">Elegí una opción</option>
-            <option>Profesional y formal</option>
-            <option>Amigable y cercano (español argentino)</option>
-            <option>Empático y cálido</option>
-            <option>Directo y eficiente</option>
-            <option>Jovial y divertido</option>
-          </select>
-        </div>
-      </div>
-      <div class="field-group full">
-        <div class="field">
-          <label for="agent-presentation">Mensaje de bienvenida</label>
-          <textarea id="agent-presentation" placeholder="Ej: ¡Hola! Soy Valentina, asistente virtual de Forma Studio. Puedo ayudarte con información sobre nuestros tratamientos, precios y turnos. ¿En qué te ayudo hoy?"></textarea>
-        </div>
-      </div>
-    </div>
+
 
     <div class="card">
       <div class="card-title"><div class="card-title-icon">📅</div> Configuración de turnos</div>
@@ -1440,8 +1414,11 @@
       'rosa':'Rosa & Vino','custom':'Colores propios'
     };
     const fontNames = {
-      'dm-sans':'DM Sans','plus-jakarta':'Plus Jakarta Sans','playfair':'Playfair Display',
-      'cormorant':'Cormorant Garamond','albert':'Albert Sans','outfit':'Outfit'
+      'dm-sans':'DM Sans (Forma Studio)',
+      'helvetica':'Helvetica Neue (Ivory Clinic)',
+      'plus-jakarta':'Plus Jakarta Sans (DentAll)',
+      'inter':'Inter Bold (White Smile)',
+      'urbanist-albert':'Urbanist + Albert Sans (Oris Clinic)'
     };
 
     const services = [];
@@ -1476,9 +1453,13 @@
       </div>
 
       <div class="summary-block">
+        <div class="summary-title">Web de referencia</div>
+        <div class="summary-row"><span class="summary-key">Link</span><span class="summary-val">${v('ref-web') || '—'}</span></div>
+        <div class="summary-row"><span class="summary-key">Qué le gusta</span><span class="summary-val">${v('ref-web-desc') || '—'}</span></div>
+      </div>
+
+      <div class="summary-block">
         <div class="summary-title">Agente de IA</div>
-        <div class="summary-row"><span class="summary-key">Nombre</span><span class="summary-val">${v('agent-name')}</span></div>
-        <div class="summary-row"><span class="summary-key">Tono</span><span class="summary-val">${v('agent-tone')}</span></div>
         <div class="summary-row"><span class="summary-key">Calendar</span><span class="summary-val">${v('cal-email')}</span></div>
         <div class="summary-row"><span class="summary-key">Horario turnos</span><span class="summary-val">${v('turno-horario')}</span></div>
       </div>
@@ -1584,14 +1565,10 @@
       plantilla: templateNames[state.template] || '—',
       paleta: (paletteNames[state.palette] || '—') + customColors,
       tipografia: fontNames[state.font] || '—',
+      ref_web: v('ref-web') ? v('ref-web') + (v('ref-web-desc') ? '\nQué le gusta: ' + v('ref-web-desc') : '') : '—',
 
       /* Bloque 5 — Agente IA */
-      agente: [
-        'Nombre: ' + v('agent-name'),
-        'Género: ' + v('agent-gender'),
-        'Tono: ' + v('agent-tone'),
-        'Mensaje de bienvenida: ' + v('agent-presentation'),
-      ].join('\n'),
+      ref_web: v('ref-web') ? v('ref-web') + (v('ref-web-desc') ? '\nQué le gusta: ' + v('ref-web-desc') : '') : '—',
 
       turnos: [
         'Email Google Calendar: ' + v('cal-email'),
@@ -1641,8 +1618,6 @@
   init();
 </script>
 
-<!-- EmailJS SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 </body>
 </html>
