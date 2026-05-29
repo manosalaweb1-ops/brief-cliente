@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Brief de proyecto — completá los datos de tu negocio para empezar">
+  <title>Brief de proyecto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dark:    #0B0F1A;
+      --accent:  #1400FF;
+      --surface: #F4F5F7;
+      --white:   #FFFFFF;
+      --text:    #1A1A2E;
+      --muted:   #6B7280;
+      --border:  rgba(0,0,0,0.1);
+      --font:    'DM Sans', -apple-system, sans-serif;
+      --radius:  14px;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--surface);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--dark);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-logo {
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .topbar-logo span {
+      color: rgba(255,255,255,0.35);
+      font-weight: 300;
+    }
+
+    .topbar-steps {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .step-dot.active { background: #fff; width: 20px; border-radius: 4px; }
+    .step-dot.done   { background: rgba(255,255,255,0.5); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--dark);
+      padding: 56px 32px 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(20,0,255,0.12);
+      pointer-events: none;
+    }
+
+    .hero-inner { max-width: 720px; position: relative; }
+
+    .hero-label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      font-weight: 500;
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: #C4C7FF;
+    }
+
+    .hero-sub {
+      margin-top: 20px;
+      font-size: 15px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 480px;
+    }
+
+    /* ── PROGRESS ── */
+    .progress-wrap {
+      background: var(--white);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+
+    .prog-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .prog-item.active { color: var(--text); border-bottom-color: var(--accent); }
+    .prog-item.done   { color: var(--accent); }
+
+    .prog-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 500;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface);
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .prog-item.active .prog-num { background: var(--accent); color: #fff; }
+    .prog-item.done   .prog-num { background: #E1F5EE; color: #0F6E56; }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ── STEP PANELS ── */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    .step-header {
+      margin-bottom: 28px;
+    }
+
+    .step-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .step-title {
+      font-size: 26px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .step-title em { font-style: italic; color: var(--accent); }
+
+    .step-desc {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      border: 0.5px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title-icon {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: var(--surface);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+
+    /* ── FORM ── */
+    .field-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field-group.full { grid-template-columns: 1fr; }
+    .field-group.three { grid-template-columns: 1fr 1fr 1fr; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+
+    .field label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      resize: none;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: var(--accent);
+      background: var(--white);
+    }
+
+    .field textarea { min-height: 90px; line-height: 1.6; }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ── TEMPLATE PICKER ── */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .template-card {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--white);
+      position: relative;
+    }
+
+    .template-card:hover { border-color: rgba(20,0,255,0.3); transform: translateY(-2px); }
+    .template-card.selected { border-color: var(--accent); }
+
+    .template-check {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 12px;
+      display: none;
+      align-items: center; justify-content: center;
+      z-index: 2;
+    }
+
+    .template-card.selected .template-check { display: flex; }
+
+    .template-preview {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .template-info { padding: 12px 14px; }
+
+    .template-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .template-mood {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── PALETTE PICKER ── */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .palette-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--white);
+      position: relative;
+    }
+
+    .palette-card:hover { border-color: rgba(20,0,255,0.3); }
+    .palette-card.selected { border-color: var(--accent); }
+
+    .palette-check {
+      position: absolute;
+      top: 8px; right: 8px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      display: none;
+      align-items: center; justify-content: center;
+    }
+
+    .palette-card.selected .palette-check { display: flex; }
+
+    .palette-swatches {
+      display: flex;
+      height: 50px;
+    }
+
+    .palette-swatch { flex: 1; }
+
+    .palette-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      padding: 8px 10px 4px;
+    }
+
+    .palette-desc {
+      font-size: 11px;
+      color: var(--muted);
+      padding: 0 10px 10px;
+    }
+
+    /* ── SERVICE ROW ── */
+    .service-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .service-row input { flex: 1; }
+    .service-row input.price { width: 120px; flex: none; }
+
+    .btn-remove {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      border: 0.5px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .btn-remove:hover { background: #FCEBEB; color: #A32D2D; border-color: #F09595; }
+
+    .btn-add {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--accent);
+      background: none;
+      border: 0.5px dashed rgba(20,0,255,0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.15s;
+      font-family: var(--font);
+    }
+
+    .btn-add:hover { background: rgba(20,0,255,0.04); }
+
+    /* ── TEAM ROW ── */
+    .team-row-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    /* ── TYPOGRAPHY PICKER ── */
+    .font-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .font-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--white);
+      position: relative;
+    }
+
+    .font-card:hover { border-color: rgba(20,0,255,0.3); }
+    .font-card.selected { border-color: var(--accent); }
+
+    .font-check {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      display: none;
+      align-items: center; justify-content: center;
+    }
+
+    .font-card.selected .font-check { display: flex; }
+
+    .font-sample {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .font-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .font-style {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── METRIC ROW ── */
+    .metric-row-item {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 0.5px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── NAV BUTTONS ── */
+    .nav-btns {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      gap: 12px;
+    }
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--muted);
+      background: none;
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all 0.15s;
+    }
+
+    .btn-back:hover { color: var(--text); border-color: var(--muted); }
+
+    .btn-next {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: opacity 0.15s;
+      margin-left: auto;
+    }
+
+    .btn-next:hover { opacity: 0.85; }
+
+    /* ── SUMMARY ── */
+    .summary-block {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      margin-bottom: 14px;
+    }
+
+    .summary-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 7px 0;
+      border-bottom: 0.5px solid var(--border);
+      font-size: 13px;
+    }
+
+    .summary-row:last-child { border-bottom: none; }
+    .summary-key { color: var(--muted); flex-shrink: 0; }
+    .summary-val { color: var(--text); font-weight: 400; text-align: right; }
+
+    .template-preview-final {
+      height: 60px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    /* ── SUCCESS ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: #E1F5EE;
+      color: #0F6E56;
+      font-size: 28px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .success-title {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .success-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .field-group { grid-template-columns: 1fr; }
+      .field-group.three { grid-template-columns: 1fr; }
+      .template-grid { grid-template-columns: 1fr 1fr; }
+      .font-grid { grid-template-columns: 1fr 1fr; }
+      .topbar { padding: 14px 20px; }
+      .hero { padding: 40px 20px 52px; }
+      .progress-wrap { padding: 0 16px; }
+      .main { padding: 28px 16px 60px; }
+      .card { padding: 18px 20px; }
+      .metric-row-item { grid-template-columns: 80px 1fr auto; }
+      .team-row-item { grid-template-columns: 1fr; }
+      .team-row-item .btn-remove { width: 100%; justify-content: center; }
+    }
+
+    @media (max-width: 400px) {
+      .template-grid { grid-template-columns: 1fr; }
+      .palette-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+
+  <!-- Google Fonts para previews de tipografías -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400&family=Cormorant+Garamond:wght@300;400&family=Plus+Jakarta+Sans:wght@300;400;500&family=Albert+Sans:wght@300;400;700&family=Outfit:wght@300;400;500&family=Sora:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <div class="topbar-logo">tu agencia<span> · brief de proyecto</span></div>
+  <div class="topbar-steps" id="topbar-dots"></div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Brief de proyecto</div>
+    <h1 class="hero-title">Contanos sobre<br><em>tu negocio</em></h1>
+    <p class="hero-sub">Completá este formulario paso a paso. Con esta información vamos a construir tu web y configurar tu asistente de WhatsApp.</p>
+  </div>
+</header>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap" id="progress-bar"></div>
+
+<!-- MAIN CONTENT -->
+<main class="main" id="main-content">
+
+  <!-- STEP 1: Datos básicos del negocio -->
+  <section class="step-panel active" id="step-1">
+    <div class="step-header">
+      <div class="step-label">Paso 1 de 6</div>
+      <h2 class="step-title">Tu <em>negocio</em></h2>
+      <p class="step-desc">Información base para construir tu presencia digital.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">🏢</div> Identidad</div>
+      <div class="field-group" style="margin-bottom:14px;">
+        <div class="field">
+          <label for="biz-name">Nombre del negocio *</label>
+          <input type="text" id="biz-name" placeholder="Ej: Clínica Dental Del Valle">
+        </div>
+        <div class="field">
+          <label for="biz-type">Tipo de negocio</label>
+          <select id="biz-type">
+            <option value="">Elegí una opción</option>
+            <option>Clínica dental</option>
+            <option>Estética / spa</option>
+            <option>Consultorio médico</option>
+            <option>Centro de salud</option>
+            <option>Peluquería / barbería</option>
+            <option>Gimnasio / pilates</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group" style="margin-bottom:14px;">
+        <div class="field">
+          <label for="biz-slogan">Slogan o frase de la marca</label>
+          <input type="text" id="biz-slogan" placeholder="Ej: Tu sonrisa, nuestra pasión">
+        </div>
+        <div class="field">
+          <label for="biz-years">Años en el mercado</label>
+          <input type="number" id="biz-years" placeholder="Ej: 8" min="0">
+        </div>
+      </div>
+      <div class="field-group full">
+        <div class="field">
+          <label for="biz-desc">¿Qué hace tu negocio? (en tus palabras)</label>
+          <textarea id="biz-desc" placeholder="Describí brevemente a qué se dedica tu negocio, qué lo hace diferente, y a quién va dirigido..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">📍</div> Ubicación y contacto</div>
+      <div class="field-group" style="margin-bottom:14px;">
+        <div class="field">
+          <label for="biz-address">Dirección</label>
+          <input type="text" id="biz-address" placeholder="Ej: Av. Santa Fe 3421, Palermo, CABA">
+        </div>
+        <div class="field">
+          <label for="biz-phone">WhatsApp / teléfono *</label>
+          <input type="tel" id="biz-phone" placeholder="Ej: +54 11 1234-5678">
+        </div>
+      </div>
+      <div class="field-group" style="margin-bottom:14px;">
+        <div class="field">
+          <label for="biz-email">Email de contacto</label>
+          <input type="email" id="biz-email" placeholder="Ej: info@tuclinica.com">
+        </div>
+        <div class="field">
+          <label for="biz-hours">Horario de atención</label>
+          <input type="text" id="biz-hours" placeholder="Ej: Lun–Vie 9–19, Sáb 9–14">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field">
+          <label for="biz-instagram">Instagram</label>
+          <input type="text" id="biz-instagram" placeholder="@tuclinica">
+        </div>
+        <div class="field">
+          <label for="biz-web-actual">Web actual (si tenés)</label>
+          <input type="url" id="biz-web-actual" placeholder="https://...">
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-next" onclick="goToStep(2)">Siguiente → Servicios</button>
+    </div>
+  </section>
+
+  <!-- STEP 2: Servicios -->
+  <section class="step-panel" id="step-2">
+    <div class="step-header">
+      <div class="step-label">Paso 2 de 6</div>
+      <h2 class="step-title">Tus <em>servicios</em></h2>
+      <p class="step-desc">Listá los servicios que ofrece tu negocio. El agente de IA va a usar esta info para responder a los clientes.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">⚡</div> Servicios y precios</div>
+      <div style="display:flex; gap:10px; margin-bottom:8px;">
+        <div style="flex:1; font-size:11px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Servicio</div>
+        <div style="width:120px; font-size:11px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Precio (ARS)</div>
+        <div style="width:36px;"></div>
+      </div>
+      <div id="services-list"></div>
+      <button class="btn-add" onclick="addService()">+ Agregar servicio</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">📊</div> Métricas de confianza</div>
+      <p class="step-desc" style="margin-bottom:16px; font-size:13px;">Números que transmiten credibilidad (aparecen en la web).</p>
+      <div style="display:grid; grid-template-columns:80px 1fr; gap:6px; margin-bottom:8px;">
+        <div style="font-size:11px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Número</div>
+        <div style="font-size:11px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em;">Descripción</div>
+      </div>
+      <div id="metrics-list"></div>
+      <button class="btn-add" onclick="addMetric()">+ Agregar métrica</button>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goToStep(1)">← Atrás</button>
+      <button class="btn-next" onclick="goToStep(3)">Siguiente → Equipo</button>
+    </div>
+  </section>
+
+  <!-- STEP 3: Equipo y testimonios -->
+  <section class="step-panel" id="step-3">
+    <div class="step-header">
+      <div class="step-label">Paso 3 de 6</div>
+      <h2 class="step-title">Tu <em>equipo</em></h2>
+      <p class="step-desc">Las personas detrás del negocio generan confianza.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">👥</div> Profesionales / staff</div>
+      <div id="team-list"></div>
+      <button class="btn-add" onclick="addTeamMember()">+ Agregar persona</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">💬</div> Testimonios de clientes</div>
+      <p class="step-desc" style="margin-bottom:16px; font-size:13px;">Agregá 2–4 testimonios reales. El agente IA puede usarlos para dar confianza.</p>
+      <div id="testimonials-list"></div>
+      <button class="btn-add" onclick="addTestimonial()">+ Agregar testimonio</button>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goToStep(2)">← Atrás</button>
+      <button class="btn-next" onclick="goToStep(4)">Siguiente → Estilo visual</button>
+    </div>
+  </section>
+
+  <!-- STEP 4: Estilo visual -->
+  <section class="step-panel" id="step-4">
+    <div class="step-header">
+      <div class="step-label">Paso 4 de 6</div>
+      <h2 class="step-title">Estilo <em>visual</em></h2>
+      <p class="step-desc">Elegí la personalidad visual de tu web. Después podés ajustar colores y tipografías.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">🎨</div> Plantilla de diseño</div>
+      <p class="step-desc" style="margin-bottom:18px; font-size:13px;">Cada plantilla tiene su propio carácter. Elegí la que más representa a tu negocio.</p>
+
+      <div class="template-grid" id="template-grid">
+
+        <div class="template-card" onclick="selectTemplate(this, 'forma')" data-template="forma">
+          <div class="template-check">✓</div>
+          <div class="template-preview" style="background:#0B0B5A; color:#C4C7FF;">
+            <span style="font-size:14px; font-weight:300; text-align:center; padding:8px;">
+              <span style="font-style:italic;">Forma</span><br>
+              <span style="font-size:10px; opacity:0.5; letter-spacing:0.1em;">STUDIO</span>
+            </span>
+          </div>
+          <div class="template-info">
+            <div class="template-name">Forma Studio</div>
+            <div class="template-mood">Azul oscuro · Elegante · Aspiracional</div>
+          </div>
+        </div>
+
+        <div class="template-card" onclick="selectTemplate(this, 'ivory')" data-template="ivory">
+          <div class="template-check">✓</div>
+          <div class="template-preview" style="background:#0C1212; color:#E4EBF0;">
+            <span style="font-size:14px; font-weight:300; text-align:center; padding:8px; letter-spacing:-0.04em;">
+              Ivory<br>
+              <span style="color:rgba(228,235,240,0.3); font-size:11px;">CLINIC</span>
+            </span>
+          </div>
+          <div class="template-info">
+            <div class="template-name">Ivory</div>
+            <div class="template-mood">Negro · Minimalista · Premium</div>
+          </div>
+        </div>
+
+        <div class="template-card" onclick="selectTemplate(this, 'dentall')" data-template="dentall">
+          <div class="template-check">✓</div>
+          <div class="template-preview" style="background:#476C6E; color:#B0EBDF;">
+            <span style="font-size:14px; font-weight:300; text-align:center; padding:8px;">
+              Dent<span style="color:rgba(176,235,223,0.5);">All</span><br>
+              <span style="font-size:10px; opacity:0.5; letter-spacing:0.08em;">CLINIC</span>
+            </span>
+          </div>
+          <div class="template-info">
+            <div class="template-name">DentAll</div>
+            <div class="template-mood">Verde salvia · Natural · Cálido</div>
+          </div>
+        </div>
+
+        <div class="template-card" onclick="selectTemplate(this, 'whitesmile')" data-template="whitesmile">
+          <div class="template-check">✓</div>
+          <div class="template-preview" style="background:#142C25; color:#00CC82;">
+            <span style="font-size:14px; font-weight:300; text-align:center; padding:8px; letter-spacing:-0.02em;">
+              White<br>
+              <span style="color:#00CC82; font-weight:500; font-size:16px;">Smile</span>
+            </span>
+          </div>
+          <div class="template-info">
+            <div class="template-name">White Smile</div>
+            <div class="template-mood">Verde menta · Moderno · Fresco</div>
+          </div>
+        </div>
+
+        <div class="template-card" onclick="selectTemplate(this, 'oris')" data-template="oris">
+          <div class="template-check">✓</div>
+          <div class="template-preview" style="background:#0038FF; color:#FFFFFF;">
+            <span style="font-size:18px; font-weight:700; text-align:center; padding:8px; letter-spacing:-0.04em; font-family:'Albert Sans', sans-serif;">
+              ORIS<br>
+              <span style="font-size:10px; font-weight:400; opacity:0.6; letter-spacing:0.12em;">CLINIC</span>
+            </span>
+          </div>
+          <div class="template-info">
+            <div class="template-name">Oris</div>
+            <div class="template-mood">Azul eléctrico · Bold · Tecnológico</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">🎨</div> Paleta de colores</div>
+      <p class="step-desc" style="margin-bottom:18px; font-size:13px;">¿Tenés colores de marca? Elegí la que más se acerque. Si ya tenés tus colores exactos, los cargamos después.</p>
+      <div class="palette-grid" id="palette-grid">
+
+        <div class="palette-card" onclick="selectPalette(this, 'azul-profundo')">
+          <div class="palette-check">✓</div>
+          <div class="palette-swatches">
+            <div class="palette-swatch" style="background:#0B0B5A;"></div>
+            <div class="palette-swatch" style="background:#1400FF;"></div>
+            <div class="palette-swatch" style="background:#C4C7FF;"></div>
+            <div class="palette-swatch" style="background:#EBF2F9;"></div>
+          </div>
+          <div class="palette-name">Azul profundo</div>
+          <div class="palette-desc">Confianza · Tecnología</div>
+        </div>
+
+        <div class="palette-card" onclick="selectPalette(this, 'negro-ice')">
+          <div class="palette-check">✓</div>
+          <div class="palette-swatches">
+            <div class="palette-swatch" style="background:#0C1212;"></div>
+            <div class="palette-swatch" style="background:#2C3E3E;"></div>
+            <div class="palette-swatch" style="background:#B8C2C8;"></div>
+            <div class="palette-swatch" style="background:#E4EBF0;"></div>
+          </div>
+          <div class="palette-name">Negro & Ice</div>
+          <div class="palette-desc">Lujo · Minimalismo</div>
+        </div>
+
+        <div class="palette-card" onclick="selectPalette(this, 'salvia')">
+          <div class="palette-check">✓</div>
+          <div class="palette-swatches">
+            <div class="palette-swatch" style="background:#476C6E;"></div>
+            <div class="palette-swatch" style="background:#66475C;"></div>
+            <div class="palette-swatch" style="background:#B0EBDF;"></div>
+            <div class="palette-swatch" style="background:#DEDCCE;"></div>
+          </div>
+          <div class="palette-name">Salvia & Mauve</div>
+          <div class="palette-desc">Natural · Cálido · Bienestar</div>
+        </div>
+
+        <div class="palette-card" onclick="selectPalette(this, 'menta')">
+          <div class="palette-check">✓</div>
+          <div class="palette-swatches">
+            <div class="palette-swatch" style="background:#142C25;"></div>
+            <div class="palette-swatch" style="background:#00CC82;"></div>
+            <div class="palette-swatch" style="background:#A0F0D0;"></div>
+            <div class="palette-swatch" style="background:#F1F1F1;"></div>
+          </div>
+          <div class="palette-name">Verde menta</div>
+          <div class="palette-desc">Salud · Energía · Frescura</div>
+        </div>
+
+        <div class="palette-card" onclick="selectPalette(this, 'electrico')">
+          <div class="palette-check">✓</div>
+          <div class="palette-swatches">
+            <div class="palette-swatch" style="background:#0038FF;"></div>
+            <div class="palette-swatch" style="background:#0D0D0D;"></div>
+            <div class="palette-swatch" style="background:#ABA8B0;"></div>
+            <div class="palette-swatch" style="background:#F8F9FC;"></div>
+          </div>
+          <div class="palette-name">Azul eléctrico</div>
+          <div class="palette-desc">Moderno · Impacto · Digital</div>
+        </div>
+
+        <div class="palette-card" onclick="selectPalette(this, 'tierra')">
+          <div class="palette-check">✓</div>
+          <div class="palette-swatches">
+            <div class="palette-swatch" style="background:#3D2B1F;"></div>
+            <div class="palette-swatch" style="background:#C68B59;"></div>
+            <div class="palette-swatch" style="background:#E8D5B7;"></div>
+            <div class="palette-swatch" style="background:#FAF6F0;"></div>
+          </div>
+          <div class="palette-name">Tierra & Oro</div>
+          <div class="palette-desc">Calidez · Lujo · Orgánico</div>
+        </div>
+
+        <div class="palette-card" onclick="selectPalette(this, 'rosa')">
+          <div class="palette-check">✓</div>
+          <div class="palette-swatches">
+            <div class="palette-swatch" style="background:#8B1A4A;"></div>
+            <div class="palette-swatch" style="background:#D4537E;"></div>
+            <div class="palette-swatch" style="background:#F4C0D1;"></div>
+            <div class="palette-swatch" style="background:#FDF0F5;"></div>
+          </div>
+          <div class="palette-name">Rosa & Vino</div>
+          <div class="palette-desc">Femenino · Delicado · Premium</div>
+        </div>
+
+        <div class="palette-card" onclick="selectPalette(this, 'custom')">
+          <div class="palette-check">✓</div>
+          <div class="palette-swatches" style="position:relative; align-items:center; justify-content:center; background: repeating-linear-gradient(45deg,#f0f0f0 0,#f0f0f0 5px,#fff 5px,#fff 10px);">
+            <span style="position:absolute; font-size:11px; font-weight:500; color:#888; text-align:center; padding:4px;">Tengo mis colores</span>
+          </div>
+          <div class="palette-name">Colores propios</div>
+          <div class="palette-desc">Los defino abajo</div>
+        </div>
+
+      </div>
+
+      <div id="custom-colors-section" style="display:none; margin-top:16px;">
+        <div class="divider"></div>
+        <div class="field-group three" style="margin-top:16px;">
+          <div class="field">
+            <label for="color-primary">Color primario</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input type="color" id="color-primary-picker" value="#1400FF" style="width:40px; height:38px; padding:2px; border-radius:8px; cursor:pointer; flex-shrink:0;">
+              <input type="text" id="color-primary" placeholder="#1400FF" style="flex:1;">
+            </div>
+          </div>
+          <div class="field">
+            <label for="color-dark">Color oscuro / fondo</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input type="color" id="color-dark-picker" value="#0B0B5A" style="width:40px; height:38px; padding:2px; border-radius:8px; cursor:pointer; flex-shrink:0;">
+              <input type="text" id="color-dark" placeholder="#0B0B5A" style="flex:1;">
+            </div>
+          </div>
+          <div class="field">
+            <label for="color-accent">Color acento / claro</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input type="color" id="color-accent-picker" value="#C4C7FF" style="width:40px; height:38px; padding:2px; border-radius:8px; cursor:pointer; flex-shrink:0;">
+              <input type="text" id="color-accent" placeholder="#C4C7FF" style="flex:1;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">🔤</div> Tipografía</div>
+      <p class="step-desc" style="margin-bottom:18px; font-size:13px;">¿Qué sensación querés que transmita el texto de tu web?</p>
+      <div class="font-grid" id="font-grid">
+
+        <div class="font-card" onclick="selectFont(this, 'dm-sans')">
+          <div class="font-check">✓</div>
+          <div class="font-sample" style="font-family:'DM Sans',sans-serif;">Aa Bb</div>
+          <div class="font-name">DM Sans</div>
+          <div class="font-style">Moderno · Geométrico · Limpio</div>
+        </div>
+
+        <div class="font-card" onclick="selectFont(this, 'plus-jakarta')">
+          <div class="font-check">✓</div>
+          <div class="font-sample" style="font-family:'Plus Jakarta Sans',sans-serif;">Aa Bb</div>
+          <div class="font-name">Plus Jakarta Sans</div>
+          <div class="font-style">Amigable · Contemporáneo</div>
+        </div>
+
+        <div class="font-card" onclick="selectFont(this, 'playfair')">
+          <div class="font-check">✓</div>
+          <div class="font-sample" style="font-family:'Playfair Display',serif; font-style:italic;">Aa Bb</div>
+          <div class="font-name">Playfair Display</div>
+          <div class="font-style">Clásico · Elegante · Editorial</div>
+        </div>
+
+        <div class="font-card" onclick="selectFont(this, 'cormorant')">
+          <div class="font-check">✓</div>
+          <div class="font-sample" style="font-family:'Cormorant Garamond',serif; font-weight:300;">Aa Bb</div>
+          <div class="font-name">Cormorant Garamond</div>
+          <div class="font-style">Refinado · Luxury · Atemporal</div>
+        </div>
+
+        <div class="font-card" onclick="selectFont(this, 'albert')">
+          <div class="font-check">✓</div>
+          <div class="font-sample" style="font-family:'Albert Sans',sans-serif; font-weight:700;">Aa Bb</div>
+          <div class="font-name">Albert Sans</div>
+          <div class="font-style">Bold · Tecnológico · Directo</div>
+        </div>
+
+        <div class="font-card" onclick="selectFont(this, 'outfit')">
+          <div class="font-check">✓</div>
+          <div class="font-sample" style="font-family:'Outfit',sans-serif;">Aa Bb</div>
+          <div class="font-name">Outfit</div>
+          <div class="font-style">Fresco · Juvenil · Versátil</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goToStep(3)">← Atrás</button>
+      <button class="btn-next" onclick="goToStep(5)">Siguiente → Agente IA</button>
+    </div>
+  </section>
+
+  <!-- STEP 5: Agente IA -->
+  <section class="step-panel" id="step-5">
+    <div class="step-header">
+      <div class="step-label">Paso 5 de 6</div>
+      <h2 class="step-title">Tu agente <em>de IA</em></h2>
+      <p class="step-desc">Configuramos el asistente que va a atender a tus clientes por WhatsApp.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">🤖</div> Personalidad del asistente</div>
+      <div class="field-group" style="margin-bottom:14px;">
+        <div class="field">
+          <label for="agent-name">Nombre del asistente *</label>
+          <input type="text" id="agent-name" placeholder="Ej: Valentina, Lucía, Max...">
+          <span class="field-hint">El nombre con el que se presenta a los clientes.</span>
+        </div>
+        <div class="field">
+          <label for="agent-gender">Género</label>
+          <select id="agent-gender">
+            <option value="">Elegí una opción</option>
+            <option>Femenino</option>
+            <option>Masculino</option>
+            <option>Neutro</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group full" style="margin-bottom:14px;">
+        <div class="field">
+          <label for="agent-tone">Tono y estilo de comunicación</label>
+          <select id="agent-tone">
+            <option value="">Elegí una opción</option>
+            <option>Profesional y formal</option>
+            <option>Amigable y cercano (español argentino)</option>
+            <option>Empático y cálido</option>
+            <option>Directo y eficiente</option>
+            <option>Jovial y divertido</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group full">
+        <div class="field">
+          <label for="agent-presentation">Mensaje de bienvenida</label>
+          <textarea id="agent-presentation" placeholder="Ej: ¡Hola! Soy Valentina, asistente virtual de Forma Studio. Puedo ayudarte con información sobre nuestros tratamientos, precios y turnos. ¿En qué te ayudo hoy?"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">📅</div> Configuración de turnos</div>
+      <div class="field-group" style="margin-bottom:14px;">
+        <div class="field">
+          <label for="cal-email">Email de Google Calendar *</label>
+          <input type="email" id="cal-email" placeholder="Ej: turnos@tuclinica.com">
+          <span class="field-hint">El agente crea eventos automáticamente en este calendario.</span>
+        </div>
+        <div class="field">
+          <label for="cal-advance">Anticipación mínima para reservar</label>
+          <select id="cal-advance">
+            <option>1 hora</option>
+            <option>2 horas</option>
+            <option>24 horas</option>
+            <option>48 horas</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group" style="margin-bottom:14px;">
+        <div class="field">
+          <label for="turno-duracion">Duración estándar del turno</label>
+          <select id="turno-duracion">
+            <option>30 minutos</option>
+            <option>45 minutos</option>
+            <option>60 minutos</option>
+            <option>90 minutos</option>
+            <option>Varía por servicio</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="turno-horario">Horario disponible para turnos</label>
+          <input type="text" id="turno-horario" placeholder="Ej: Lun–Vie 9:00–18:00, Sáb 9:00–13:00">
+        </div>
+      </div>
+      <div class="field-group full">
+        <div class="field">
+          <label for="escalation-msg">Mensaje de escalación al staff</label>
+          <textarea id="escalation-msg" placeholder="Ej: Nuestro equipo va a contactarte a la brevedad para confirmar tu turno. Horario de atención: Lun–Vie 9–19 hs."></textarea>
+          <span class="field-hint">Qué le dice el agente al cliente cuando no puede resolver algo.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="card-title-icon">❓</div> Preguntas frecuentes</div>
+      <p class="step-desc" style="margin-bottom:16px; font-size:13px;">¿Qué preguntan siempre tus clientes? El agente responde estas automáticamente.</p>
+      <div id="faq-list"></div>
+      <button class="btn-add" onclick="addFaq()">+ Agregar pregunta frecuente</button>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goToStep(4)">← Atrás</button>
+      <button class="btn-next" onclick="goToStep(6)">Siguiente → Revisar y enviar</button>
+    </div>
+  </section>
+
+  <!-- STEP 6: Resumen y envío -->
+  <section class="step-panel" id="step-6">
+    <div class="step-header">
+      <div class="step-label">Paso 6 de 6</div>
+      <h2 class="step-title">Revisá y <em>enviá</em></h2>
+      <p class="step-desc">Revisá todo antes de enviar. Podés volver atrás para editar cualquier sección.</p>
+    </div>
+
+    <div id="summary-content"></div>
+
+    <div class="card" style="border: 1.5px solid rgba(20,0,255,0.2); background: rgba(20,0,255,0.02);">
+      <div class="card-title"><div class="card-title-icon">📎</div> Archivos e imágenes</div>
+      <p class="step-desc" style="margin-bottom:16px; font-size:13px;">Podés enviarnos fotos del local, del equipo, o el logo después por WhatsApp. No es obligatorio ahora.</p>
+      <div class="field-group full">
+        <div class="field">
+          <label for="extra-notes">Notas adicionales / algo que quieras aclarar</label>
+          <textarea id="extra-notes" placeholder="Cualquier detalle extra que quieras que sepamos antes de empezar..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goToStep(5)">← Atrás</button>
+      <button class="btn-next" onclick="submitBrief()" style="background:#0F6E56; gap:8px;">
+        ✓ Enviar brief
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="success-screen">
+  <div class="success-icon">✓</div>
+  <h2 class="success-title">¡Brief recibido!</h2>
+  <p class="success-sub">Ya tenemos todo lo que necesitamos para empezar. Te contactamos en las próximas 24 horas con los primeros avances.</p>
+</div>
+
+<script>
+  /* ── STATE ── */
+  const state = {
+    currentStep: 1,
+    totalSteps: 6,
+    template: null,
+    palette: null,
+    font: null
+  };
+
+  const steps = [
+    { label: 'Negocio' },
+    { label: 'Servicios' },
+    { label: 'Equipo' },
+    { label: 'Estilo' },
+    { label: 'Agente IA' },
+    { label: 'Enviar' }
+  ];
+
+  /* ── INIT ── */
+  function init() {
+    renderProgress();
+    addService();
+    addService();
+    addService();
+    addMetric();
+    addMetric();
+    addMetric();
+    addTeamMember();
+    addTeamMember();
+    addTestimonial();
+    addTestimonial();
+    addFaq();
+    addFaq();
+    syncColorPickers();
+  }
+
+  /* ── PROGRESS ── */
+  function renderProgress() {
+    const bar = document.getElementById('progress-bar');
+    const dots = document.getElementById('topbar-dots');
+    bar.innerHTML = '';
+    dots.innerHTML = '';
+
+    steps.forEach((s, i) => {
+      const n = i + 1;
+      const isDone = n < state.currentStep;
+      const isActive = n === state.currentStep;
+
+      const item = document.createElement('div');
+      item.className = 'prog-item' + (isActive ? ' active' : '') + (isDone ? ' done' : '');
+      item.onclick = () => { if (isDone) goToStep(n); };
+      item.innerHTML = `<span class="prog-num">${isDone ? '✓' : n}</span>${s.label}`;
+      bar.appendChild(item);
+
+      const dot = document.createElement('div');
+      dot.className = 'step-dot' + (isActive ? ' active' : '') + (isDone ? ' done' : '');
+      dots.appendChild(dot);
+    });
+  }
+
+  /* ── NAVIGATION ── */
+  function goToStep(n) {
+    document.getElementById('step-' + state.currentStep).classList.remove('active');
+    state.currentStep = n;
+    document.getElementById('step-' + n).classList.add('active');
+    renderProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (n === 6) renderSummary();
+  }
+
+  /* ── SERVICES ── */
+  function addService() {
+    const list = document.getElementById('services-list');
+    const row = document.createElement('div');
+    row.className = 'service-row';
+    row.innerHTML = `
+      <input type="text" placeholder="Ej: Limpieza dental" style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;flex:1;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
+      <input type="text" class="price" placeholder="$ 15.000" style="width:120px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
+      <button class="btn-remove" onclick="this.parentElement.remove()">×</button>
+    `;
+    list.appendChild(row);
+  }
+
+  /* ── METRICS ── */
+  function addMetric() {
+    const list = document.getElementById('metrics-list');
+    const row = document.createElement('div');
+    row.className = 'metric-row-item';
+    row.innerHTML = `
+      <input type="text" placeholder="Ej: 1500+" style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
+      <input type="text" placeholder="Pacientes atendidos" style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
+      <button class="btn-remove" onclick="this.parentElement.remove()">×</button>
+    `;
+    list.appendChild(row);
+  }
+
+  /* ── TEAM ── */
+  function addTeamMember() {
+    const list = document.getElementById('team-list');
+    const row = document.createElement('div');
+    row.className = 'team-row-item';
+    row.style.marginBottom = '10px';
+    row.innerHTML = `
+      <input type="text" placeholder="Nombre y título. Ej: Dra. Ana García" style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
+      <input type="text" placeholder="Especialidad. Ej: Odontología estética" style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
+      <button class="btn-remove" onclick="this.parentElement.remove()">×</button>
+    `;
+    list.appendChild(row);
+  }
+
+  /* ── TESTIMONIALS ── */
+  function addTestimonial() {
+    const list = document.getElementById('testimonials-list');
+    const row = document.createElement('div');
+    row.style.marginBottom = '10px';
+    row.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:flex-start;margin-bottom:8px;">
+        <input type="text" placeholder="Nombre del cliente. Ej: María González" style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
+        <button class="btn-remove" onclick="this.closest('div').parentElement.remove()">×</button>
+      </div>
+      <textarea placeholder="Testimonio completo. Ej: Excelente atención, el resultado superó mis expectativas..." style="width:100%;min-height:70px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;resize:none;line-height:1.5;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'"></textarea>
+    `;
+    list.appendChild(row);
+  }
+
+  /* ── FAQ ── */
+  function addFaq() {
+    const list = document.getElementById('faq-list');
+    const row = document.createElement('div');
+    row.style.marginBottom = '10px';
+    row.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:flex-start;margin-bottom:6px;">
+        <input type="text" placeholder="Pregunta. Ej: ¿Cuánto dura el tratamiento de blanqueamiento?" style="background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
+        <button class="btn-remove" onclick="this.closest('div').parentElement.remove()">×</button>
+      </div>
+      <textarea placeholder="Respuesta completa..." style="width:100%;min-height:65px;background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;resize:none;line-height:1.5;" onfocus="this.style.borderColor='var(--accent)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--border)';this.style.background='var(--surface)'"></textarea>
+    `;
+    list.appendChild(row);
+  }
+
+  /* ── SELECTORS ── */
+  function selectTemplate(el, id) {
+    document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.template = id;
+  }
+
+  function selectPalette(el, id) {
+    document.querySelectorAll('.palette-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.palette = id;
+    document.getElementById('custom-colors-section').style.display = id === 'custom' ? 'block' : 'none';
+  }
+
+  function selectFont(el, id) {
+    document.querySelectorAll('.font-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.font = id;
+  }
+
+  function syncColorPickers() {
+    ['primary','dark','accent'].forEach(key => {
+      const picker = document.getElementById('color-' + key + '-picker');
+      const text   = document.getElementById('color-' + key);
+      if (!picker || !text) return;
+      picker.addEventListener('input', () => { text.value = picker.value; });
+      text.addEventListener('input', () => {
+        if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) picker.value = text.value;
+      });
+    });
+  }
+
+  /* ── SUMMARY ── */
+  function renderSummary() {
+    const wrap = document.getElementById('summary-content');
+    const v = id => (document.getElementById(id) || {}).value || '—';
+
+    const templateNames = {
+      forma:'Forma Studio', ivory:'Ivory', dentall:'DentAll',
+      whitesmile:'White Smile', oris:'Oris'
+    };
+    const paletteNames = {
+      'azul-profundo':'Azul profundo','negro-ice':'Negro & Ice','salvia':'Salvia & Mauve',
+      'menta':'Verde menta','electrico':'Azul eléctrico','tierra':'Tierra & Oro',
+      'rosa':'Rosa & Vino','custom':'Colores propios'
+    };
+    const fontNames = {
+      'dm-sans':'DM Sans','plus-jakarta':'Plus Jakarta Sans','playfair':'Playfair Display',
+      'cormorant':'Cormorant Garamond','albert':'Albert Sans','outfit':'Outfit'
+    };
+
+    const services = [];
+    document.querySelectorAll('#services-list .service-row').forEach(row => {
+      const ins = row.querySelectorAll('input');
+      if (ins[0] && ins[0].value) services.push(ins[0].value + (ins[1].value ? ' — ' + ins[1].value : ''));
+    });
+
+    wrap.innerHTML = `
+      <div class="summary-block">
+        <div class="summary-title">Datos del negocio</div>
+        <div class="summary-row"><span class="summary-key">Nombre</span><span class="summary-val">${v('biz-name')}</span></div>
+        <div class="summary-row"><span class="summary-key">Tipo</span><span class="summary-val">${v('biz-type')}</span></div>
+        <div class="summary-row"><span class="summary-key">Slogan</span><span class="summary-val">${v('biz-slogan')}</span></div>
+        <div class="summary-row"><span class="summary-key">Dirección</span><span class="summary-val">${v('biz-address')}</span></div>
+        <div class="summary-row"><span class="summary-key">WhatsApp</span><span class="summary-val">${v('biz-phone')}</span></div>
+        <div class="summary-row"><span class="summary-key">Email</span><span class="summary-val">${v('biz-email')}</span></div>
+        <div class="summary-row"><span class="summary-key">Horario</span><span class="summary-val">${v('biz-hours')}</span></div>
+        <div class="summary-row"><span class="summary-key">Instagram</span><span class="summary-val">${v('biz-instagram')}</span></div>
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Servicios (${services.length})</div>
+        ${services.length ? services.map(s => `<div class="summary-row"><span class="summary-val" style="text-align:left;">${s}</span></div>`).join('') : '<div class="summary-row"><span class="summary-key">—</span></div>'}
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Estilo visual</div>
+        <div class="summary-row"><span class="summary-key">Plantilla</span><span class="summary-val">${templateNames[state.template] || '—'}</span></div>
+        <div class="summary-row"><span class="summary-key">Paleta</span><span class="summary-val">${paletteNames[state.palette] || '—'}</span></div>
+        <div class="summary-row"><span class="summary-key">Tipografía</span><span class="summary-val">${fontNames[state.font] || '—'}</span></div>
+      </div>
+
+      <div class="summary-block">
+        <div class="summary-title">Agente de IA</div>
+        <div class="summary-row"><span class="summary-key">Nombre</span><span class="summary-val">${v('agent-name')}</span></div>
+        <div class="summary-row"><span class="summary-key">Tono</span><span class="summary-val">${v('agent-tone')}</span></div>
+        <div class="summary-row"><span class="summary-key">Calendar</span><span class="summary-val">${v('cal-email')}</span></div>
+        <div class="summary-row"><span class="summary-key">Horario turnos</span><span class="summary-val">${v('turno-horario')}</span></div>
+      </div>
+    `;
+  }
+
+  /* ── EMAILJS CONFIG ── */
+  /* PASO 1: Reemplazá estos 3 valores con los tuyos de emailjs.com */
+  const EMAILJS_PUBLIC_KEY   = 'qzXP6qmkkTKhRoVJ8';
+  const EMAILJS_SERVICE_ID   = 'service_sy3fudp';
+  const EMAILJS_TEMPLATE_ID  = 'template_x0ydz53';
+
+  /* ── COLLECT DATA ── */
+  function collectAllData() {
+    const v = id => (document.getElementById(id) || {}).value || '';
+
+    const services = [];
+    document.querySelectorAll('#services-list .service-row').forEach(row => {
+      const ins = row.querySelectorAll('input');
+      if (ins[0] && ins[0].value) services.push(ins[0].value + (ins[1].value ? ' → ' + ins[1].value : ''));
+    });
+
+    const metrics = [];
+    document.querySelectorAll('#metrics-list .metric-row-item').forEach(row => {
+      const ins = row.querySelectorAll('input');
+      if (ins[0] && ins[0].value) metrics.push(ins[0].value + ' ' + (ins[1].value || ''));
+    });
+
+    const team = [];
+    document.querySelectorAll('#team-list .team-row-item').forEach(row => {
+      const ins = row.querySelectorAll('input');
+      if (ins[0] && ins[0].value) team.push(ins[0].value + (ins[1] && ins[1].value ? ' — ' + ins[1].value : ''));
+    });
+
+    const testimonials = [];
+    document.querySelectorAll('#testimonials-list > div').forEach(row => {
+      const name = row.querySelector('input');
+      const text = row.querySelector('textarea');
+      if (name && name.value) testimonials.push('"' + (text ? text.value : '') + '" — ' + name.value);
+    });
+
+    const faqs = [];
+    document.querySelectorAll('#faq-list > div').forEach(row => {
+      const q = row.querySelector('input');
+      const a = row.querySelector('textarea');
+      if (q && q.value) faqs.push('P: ' + q.value + '\nR: ' + (a ? a.value : ''));
+    });
+
+    const templateNames = {
+      forma:'Forma Studio (azul oscuro · elegante)',
+      ivory:'Ivory (negro · minimalista · premium)',
+      dentall:'DentAll (verde salvia · natural · cálido)',
+      whitesmile:'White Smile (verde menta · moderno · fresco)',
+      oris:'Oris (azul eléctrico · bold · tecnológico)'
+    };
+    const paletteNames = {
+      'azul-profundo':'Azul profundo','negro-ice':'Negro & Ice',
+      'salvia':'Salvia & Mauve','menta':'Verde menta',
+      'electrico':'Azul eléctrico','tierra':'Tierra & Oro',
+      'rosa':'Rosa & Vino','custom':'Colores propios'
+    };
+    const fontNames = {
+      'dm-sans':'DM Sans','plus-jakarta':'Plus Jakarta Sans',
+      'playfair':'Playfair Display','cormorant':'Cormorant Garamond',
+      'albert':'Albert Sans','outfit':'Outfit'
+    };
+
+    const customColors = state.palette === 'custom'
+      ? '\nColor primario: ' + v('color-primary') + '\nColor oscuro: ' + v('color-dark') + '\nColor acento: ' + v('color-accent')
+      : '';
+
+    return {
+      /* Para el subject del email */
+      biz_name: v('biz-name') || 'Sin nombre',
+
+      /* Bloque 1 — Negocio */
+      negocio: [
+        'Nombre: ' + v('biz-name'),
+        'Tipo: ' + v('biz-type'),
+        'Slogan: ' + v('biz-slogan'),
+        'Años en el mercado: ' + v('biz-years'),
+        'Descripción: ' + v('biz-desc'),
+      ].join('\n'),
+
+      contacto: [
+        'Dirección: ' + v('biz-address'),
+        'WhatsApp: ' + v('biz-phone'),
+        'Email: ' + v('biz-email'),
+        'Horario: ' + v('biz-hours'),
+        'Instagram: ' + v('biz-instagram'),
+        'Web actual: ' + v('biz-web-actual'),
+      ].join('\n'),
+
+      /* Bloque 2 — Servicios */
+      servicios: services.length ? services.join('\n') : '—',
+      metricas: metrics.length ? metrics.join('\n') : '—',
+
+      /* Bloque 3 — Equipo */
+      equipo: team.length ? team.join('\n') : '—',
+      testimonios: testimonials.length ? testimonials.join('\n\n') : '—',
+
+      /* Bloque 4 — Estilo */
+      plantilla: templateNames[state.template] || '—',
+      paleta: (paletteNames[state.palette] || '—') + customColors,
+      tipografia: fontNames[state.font] || '—',
+
+      /* Bloque 5 — Agente IA */
+      agente: [
+        'Nombre: ' + v('agent-name'),
+        'Género: ' + v('agent-gender'),
+        'Tono: ' + v('agent-tone'),
+        'Mensaje de bienvenida: ' + v('agent-presentation'),
+      ].join('\n'),
+
+      turnos: [
+        'Email Google Calendar: ' + v('cal-email'),
+        'Anticipación mínima: ' + v('cal-advance'),
+        'Duración turno: ' + v('turno-duracion'),
+        'Horario disponible: ' + v('turno-horario'),
+        'Mensaje escalación: ' + v('escalation-msg'),
+      ].join('\n'),
+
+      faqs: faqs.length ? faqs.join('\n\n') : '—',
+
+      /* Extra */
+      notas: v('extra-notes') || '—',
+
+      /* Timestamp */
+      fecha: new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }),
+    };
+  }
+
+  /* ── SUBMIT ── */
+  async function submitBrief() {
+    const btn = document.querySelector('#step-6 .btn-next');
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+
+    const data = collectAllData();
+
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data, EMAILJS_PUBLIC_KEY);
+      showSuccess();
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      btn.disabled = false;
+      btn.innerHTML = '✓ Enviar brief';
+      alert('Hubo un error al enviar. Revisá la consola o contactanos por WhatsApp.');
+    }
+  }
+
+  function showSuccess() {
+    document.getElementById('main-content').style.display = 'none';
+    document.querySelector('.hero').style.display = 'none';
+    document.querySelector('.progress-wrap').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  init();
+</script>
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+</body>
+</html>
