@@ -667,7 +667,6 @@
 
   <!-- Google Fonts para previews de tipografías -->
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=Plus+Jakarta+Sans:wght@300;400;500&family=Inter:wght@300;400;700&family=Urbanist:wght@300;400;500&family=Albert+Sans:wght@300;400;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -1466,11 +1465,8 @@
     `;
   }
 
-  /* ── EMAILJS CONFIG ── */
-  /* PASO 1: Reemplazá estos 3 valores con los tuyos de emailjs.com */
-  const EMAILJS_PUBLIC_KEY   = 'qzXP6qmkkTKhRoVJ8';
-  const EMAILJS_SERVICE_ID   = 'service_sy3fudp';
-  const EMAILJS_TEMPLATE_ID  = 'template_6442qf8';
+  /* ── FORMSPREE CONFIG ── */
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mpqnbkvg';
 
   /* ── COLLECT DATA ── */
   function collectAllData() {
@@ -1595,18 +1591,84 @@
     btn.textContent = 'Enviando…';
 
     const data = collectAllData();
-    console.log('Enviando datos:', JSON.stringify(data, null, 2));
+
+    /* Armamos el cuerpo del email en texto plano legible */
+    const emailBody = [
+      '🗂 NUEVO BRIEF — ' + (data.biz_name || 'Sin nombre'),
+      'Recibido: ' + data.fecha,
+      '',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '🏢 NEGOCIO',
+      '━━━━━━━━━━━━━━━━━━━━',
+      data.negocio,
+      '',
+      '📍 CONTACTO',
+      data.contacto,
+      '',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '⚡ SERVICIOS Y PRECIOS',
+      '━━━━━━━━━━━━━━━━━━━━',
+      data.servicios,
+      '',
+      '📊 MÉTRICAS DE CONFIANZA',
+      data.metricas,
+      '',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '👥 EQUIPO',
+      '━━━━━━━━━━━━━━━━━━━━',
+      data.equipo,
+      '',
+      '💬 TESTIMONIOS',
+      data.testimonios,
+      '',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '🎨 ESTILO VISUAL',
+      '━━━━━━━━━━━━━━━━━━━━',
+      'Plantilla: ' + data.plantilla,
+      'Paleta: ' + data.paleta,
+      'Tipografía: ' + data.tipografia,
+      'Web de referencia: ' + data.ref_web,
+      '',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '📅 CONFIGURACIÓN DE TURNOS',
+      '━━━━━━━━━━━━━━━━━━━━',
+      data.turnos,
+      '',
+      '❓ PREGUNTAS FRECUENTES',
+      data.faqs,
+      '',
+      '━━━━━━━━━━━━━━━━━━━━',
+      '📎 NOTAS ADICIONALES',
+      '━━━━━━━━━━━━━━━━━━━━',
+      data.notas
+    ].join('\n');
 
     try {
-      emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-      const result = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data);
-      console.log('EmailJS OK:', result);
-      showSuccess();
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: '🗂 Nuevo brief — ' + (data.biz_name || 'Sin nombre'),
+          negocio: data.biz_name,
+          mensaje: emailBody
+        })
+      });
+
+      if (response.ok) {
+        showSuccess();
+      } else {
+        const errData = await response.json();
+        console.error('Formspree error:', errData);
+        throw new Error(errData.error || 'Error al enviar');
+      }
     } catch (err) {
-      console.error('EmailJS error completo:', JSON.stringify(err));
+      console.error('Error:', err);
       btn.disabled = false;
       btn.innerHTML = '✓ Enviar brief';
-      alert('Error: ' + (err.text || err.message || JSON.stringify(err)));
+      alert('Hubo un error: ' + err.message + '. Probá de nuevo o contactanos por WhatsApp.');
     }
   }
 
