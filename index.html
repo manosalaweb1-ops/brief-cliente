@@ -1595,15 +1595,18 @@
     btn.textContent = 'Enviando…';
 
     const data = collectAllData();
+    console.log('Enviando datos:', JSON.stringify(data, null, 2));
 
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data, EMAILJS_PUBLIC_KEY);
+      emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+      const result = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, data);
+      console.log('EmailJS OK:', result);
       showSuccess();
     } catch (err) {
-      console.error('EmailJS error:', err);
+      console.error('EmailJS error completo:', JSON.stringify(err));
       btn.disabled = false;
       btn.innerHTML = '✓ Enviar brief';
-      alert('Hubo un error al enviar. Revisá la consola o contactanos por WhatsApp.');
+      alert('Error: ' + (err.text || err.message || JSON.stringify(err)));
     }
   }
 
